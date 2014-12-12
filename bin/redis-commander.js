@@ -46,13 +46,13 @@ var args = optimist
     alias: 'a',
     string: true,
     describe: 'The address to run the server on.',
-    default: "0.0.0.0"
+    default: process.env.VCAP_APP_HOST || "0.0.0.0"
   })
   .options('port', {
     alias: 'p',
     string: true,
     describe: 'The port to run the server on.',
-    default: 8081
+    default: process.env.VCAP_APP_PORT || 8081
   })
   .options('nosave', {
      alias: 'ns',
