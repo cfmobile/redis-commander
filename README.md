@@ -22,45 +22,19 @@ config-redis-datasync-datastore      p-redis   development   datasync-datastore
 datastore-redis-datasync-datastore   p-redis   development   datasync-datastore
 ```
 
-Bind the relevant redis service and at the new redis environment variables. We need the redis host, port, and password. In this case, they're `10.1.0.123`, `52174`, `abc`, respectiviely:
+Bind the relevant redis service to the app:
 
 ```bash
 $ cf bind-service redis-commander config-redis-datasync-datastore
-$ cf env redis-commander
-Getting env variables for app redis-commander in org Pivotal / space datasync as admin...
-OK
-
-System-Provided:
-{
-  "VCAP_SERVICES": {
-    "p-redis": [
-      {
-        "credentials": {
-          "host": "10.1.0.123",
-          "password": "abc",
-          "port": 52174
-        },
-        "label": "p-redis",
-        "name": "config-redis-datasync-datastore",
-        "plan": "development",
-        "tags": [
-          "pivotal",
-          "redis"
-        ]
-      }
-    ]
-  }
-}
-No user-defined env variables have been set
 ```
 
-Push the app again, but in this case pass in the necessary redis information in a custom start command. Look for a url logged at the end of the push process:
+Push the app again, this time allowing it to start:
 
 ```bash
-$ cf push redis-commander -c "node bin/redis-commander.js --redis-port 52174 --redis-host 10.1.0.123 --redis-password abc"
-...
+$ cf push redis-commander
+…
 urls: redis-commander.my-cf-host.com
-...
+…
 ```
 
 Now you should be able to access `redis-commander.my-cf-host.com`.

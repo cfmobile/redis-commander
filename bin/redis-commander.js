@@ -5,6 +5,7 @@ var redis = require('redis');
 var app = require('../lib/app');
 var fs = require('fs');
 var myUtils = require('../lib/util');
+var cfenv = require('cfenv');
 
 var redisConnections = [];
 redisConnections.getLast = myUtils.getLast;
@@ -80,6 +81,9 @@ myUtils.getConfig(function (err, config) {
   if (!config.default_connections) {
     config.default_connections = [];
   }
+
+  addCfServiceConnections(config.default_connections);
+
   startDefaultConnections(config.default_connections, function (err) {
     if (err) {
       console.log(err);
@@ -127,6 +131,29 @@ myUtils.getConfig(function (err, config) {
   });
   return startWebApp();
 });
+
+function addCfServiceConnections(connections) {
+  var appEnv = cfenv.getAppEnv();
+  var services = appEnv.getServices();
+
+  console.log("Adding connections from VCAP_SERVICES");
+
+  for (service in services) {
+    if (services[service].tags.indexOf("redis") >= 0) {
+      var creds = services[service]["credentials"]
+      var connection = {
+        "host": creds["host"],
+        "port": creds["port"],
+        "password": creds["password"],
+        "dbIndex": 0
+      }
+
+      connections.push(connection)
+
+      console.log("Found ", service, " ", creds);
+    }
+  }
+}
 
 function startDefaultConnections (connections, callback) {
   if (connections) {
