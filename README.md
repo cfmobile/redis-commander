@@ -31,7 +31,7 @@ $ cf bind-service redis-commander config-redis-datasync-datastore
 Push the app again, this time allowing it to start:
 
 ```bash
-$ cf push redis-commander
+$ cf push redis-commander -c "node bin/redis-commander.js"
 …
 urls: redis-commander.my-cf-host.com
 …
