@@ -54,7 +54,7 @@ datasync-datastore-redis-data     p-redis   dedicated-vm   datasync-datastore
 Bind the relevant redis service to the app:
 
 ```bash
-$ cf bind-service redis-commander atasync-datastore-redis-config
+$ cf bind-service redis-commander datasync-datastore-redis-config
 ```
 
 Start the application:
