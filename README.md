@@ -60,7 +60,7 @@ $ cf bind-service redis-commander atasync-datastore-redis-config
 Start the application:
 
 ```bash
-$ cf restart
+$ cf restart redis-commander
 …
 urls: redis-commander.<my-cf-host-prefix>.<com>
 …
